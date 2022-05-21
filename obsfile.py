@@ -1,15 +1,29 @@
 import obswebsocket
+
 from obswebsocket import obsws, events, requests
 
-client = obswebsocket.obsws("localhost", 4444, "")
-client.connect()
-# client.call(obswebsocket.requests.GetVersion()).getObsWebsocketVersion()
+def getFormat():
+    return ws.call(requests.GetFilenameFormatting().getFilenameFormatting)
+
+host = "localhost"
+port = 4444
+password = "password"
+
+ws = obsws(host, port, password)
+
+ws.connect()
+
+# ws.call(obswebsocket.requests.GetVersion()).getObsWebsocketVersion()
 # u'4.1.0'
-client.call(obswebsocket.requests.GetFilenameFormatting())
+ws.call(getFormat())
+
 print("Hi! I'm your new video\nWhat's my name?\nFilename:")
-client.call(obswebsocket.requests.SetFilenameFormatting(input() + " - %MM-%DD %hh-%mm"))
-client.call(obswebsocket.requests.StartRecording())
-print(client.call(obswebsocket.requests.GetFilenameFormatting()))
-client.call(obswebsocket.requests.SetFilenameFormatting("-%MM-%DD %hh-%mm-%ss"))
-print(client.call(obswebsocket.requests.GetFilenameFormatting()))
-client.disconnect()
+
+ws.call(obswebsocket.requests.SetFilenameFormatting(input() + " - %MM-%DD %hh-%mm"))
+ws.call(obswebsocket.requests.StartRecording())
+print(getFormat())
+
+ws.call(obswebsocket.requests.SetFilenameFormatting("-%MM-%DD %hh-%mm"))
+print(getFormat())
+
+ws.disconnect()    
